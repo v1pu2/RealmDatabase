@@ -17,7 +17,7 @@ const ButtonContainer = styled.TouchableOpacity`
 	height: 40px
 	padding: 12px;
 	border-radius: 10px;	
-	background-color: '#626262';
+	background-color: lightblue;
 `;
 
 const ButtonText = styled.Text`
