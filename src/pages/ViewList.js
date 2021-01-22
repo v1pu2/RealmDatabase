@@ -2,21 +2,26 @@ import React, { Component } from "react";
 
 import styled from "styled-components";
 import MyButton from "../component/MyButton";
-const Dashboard = (props) => {
+
+const ViewList = (props) => {
   return (
     <>
       <Container>
-        <MyButton title='Register Student' onPress={()=>props.navigation.navigate("Register")} />
-        <MyButton title='View List' onPress={()=>props.navigation.navigate("ViewList")} />
+       <Title>view screen</Title>
       </Container>
     </>
   );
 };
 
-export default Dashboard;
+export default ViewList;
 const Container = styled.View`
   flex: 1;
   background-color: white;
   padding: 10px;
-  justify-content:center;
+`;
+const Title = styled.Text`
+  font-size: 14px;
+  font-weight: 500;
+  color: red;
+  margin-left:20px;
 `;
