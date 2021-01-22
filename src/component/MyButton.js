@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 const CustomButton = (props) => (
   <ButtonContainer
-    onPress={() => alert('Hi!')}
+    onPress={props.onPress}
     backgroundColor={props.backgroundColor}>
     <ButtonText>{props.title}</ButtonText>
   </ButtonContainer>
@@ -13,11 +13,14 @@ const CustomButton = (props) => (
 export default CustomButton;
 
 const ButtonContainer = styled.TouchableOpacity`
-	width: 100px;
-	height: 40px
+	width: 90%;
+  height: 40px;
+  marginLeft:20px;
+  marginTop:20px;
 	padding: 12px;
 	border-radius: 10px;	
-	background-color: lightblue;
+  background-color: lightblue;
+  justify-content:center;
 `;
 
 const ButtonText = styled.Text`

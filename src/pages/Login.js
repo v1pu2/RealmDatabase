@@ -1,40 +1,76 @@
-import React, {Component} from 'react';
-import {Button, View, Text, TextInput, StatusBar} from 'react-native';
-import {Formik} from 'formik';
-import styled from 'styled-components';
-import MyButton from '../component/MyButton';
-
-const Login = (props) => {
-  const onSubmitClick = () => {
-    props.navigation.navigate('Dashboard');
+import React, { Component, Fragment } from "react";
+import { Button, View, Text, TextInput, StatusBar, Alert } from "react-native";
+import { Formik } from "formik";
+import styled from "styled-components";
+import MyButton from "../component/MyButton";
+import * as yup from "yup";
+import AsyncStorage from '@react-native-community/async-storage';
+class Login extends Component {
+  constructor(props){
+    super(props);
+    this.state={}
+  }
+  onSubmitClick = (values) => {
+    console.log('in submit click',values);
+    AsyncStorage.setItem('ISLOGIN','true' );
+    this.props.navigation.navigate("Dashboard");
   };
-  return (
-    <Container>
-      <Title>this is login</Title>
-      <Formik initialValues={{email: '', password: ''}}>
-        {({values, handleChange}) => (
-          <View>
-            <TextInput
-              value={values.email}
-              onChangeText={handleChange('email')}
-              placeholder="E-mail"
-            />
-            <TextInput
-              value={values.password}
-              onChangeText={handleChange('password')}
-              placeholder="Password"
-              secureTextEntry={true}
-            />
-            <Text>{JSON.stringify(values)}</Text>
-            <MyButton title="submit" />
-          </View>
-        )}
-      </Formik>
 
-      {/* <Button title="submit" onPress={() => onSubmitClick()} /> */}
-    </Container>
-  );
-};
+  loginValidationSchema = yup.object().shape({
+    email: yup.string().email().required(),
+    password: yup
+      .string()
+      .min(8)
+      .max(16)
+      .matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*d)[a-zA-Zd]$")
+      .required(),
+  });
+  render() {
+    return (
+      <Container>
+     
+        <Formik
+          initialValues={{ email: "", password: "" }}
+          onSubmit={(values) => this.onSubmitClick(values)}
+          validationSchema={yup.object().shape({
+            email: yup.string().email().required(),
+            password: yup.string().min(6).required(),
+          })}
+        >
+          {({
+            values,
+            handleChange,
+            errors,
+            touched,
+            handleSubmit,
+          }) => (
+            <View style={{ width: "100%" }}>
+              <Input
+                value={values.email}
+                onChangeText={handleChange("email")}
+                placeholder='E-mail'
+              />
+              {touched.email && errors.email && <Title>{errors.email}</Title>}
+              <Input
+                value={values.password}
+                onChangeText={handleChange("password")}
+                placeholder='Password'
+                secureTextEntry={true}
+              />
+              {touched.password && errors.password && (
+                <Title>{errors.password}</Title>
+              )}
+              <MyButton
+                title='submit'
+                onPress={handleSubmit}
+              />
+            </View>
+          )}
+        </Formik>
+      </Container>
+    );
+  }
+}
 export default Login;
 const Container = styled.View`
   flex: 1;
@@ -44,13 +80,19 @@ const Container = styled.View`
 `;
 
 const Title = styled.Text`
-  font-size: 20px;
+  font-size: 14px;
   font-weight: 500;
-  color: palevioletred;
+  color: red;
+  margin-left:20px;
 `;
-// const Input = styled.input`
-//   width: 300px;
-//   height: 35px;
-//   border: 1px solid #ccc;
-//   background-color: #fff;
-// `;
+const Input = styled.TextInput`
+  font-size: 18px;
+  padding: 10px;
+  margin: 10px;
+  background: papayawhip;
+  border: none;
+  border-radius: 3px;
+  ::placeholder {
+    color: palevioletred;
+  }
+`;
