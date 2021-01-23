@@ -12,41 +12,7 @@ import {
 import Realm from "realm";
 import AccordionPanel from "../component/AccordionPanel";
 let realm;
-let A = [
-  {
-    birthdate: "",
-    email: "Cvb@fgh.ghj",
-    gender: "Male",
-    image: "Ffgh",
-    name: "Fgg",
-    roll_no: 1,
-    std: "Senior KG",
-  },
-  {
-    birthdate: "",
-    email: "Vvv@vj.sff",
-    gender: "Female",
-    image: "",
-    name: "Vipu",
-    roll_no: 3,
-    std: "Senior KG",
-  },
-];
-let B = [
-  { id: "4", value: "Benin" },
-  { id: "5", value: "Bhutan" },
-  { id: "6", value: "Bosnia" },
-  { id: "7", value: "Botswana" },
-  { id: "8", value: "Brazil" },
-  { id: "9", value: "Brunei" },
-  { id: "10", value: "Bulgaria" },
-];
-let C = [
-  { id: "11", value: "Cambodia" },
-  { id: "12", value: "Cameroon" },
-  { id: "13", value: "Canada" },
-  { id: "14", value: "Cabo" },
-];
+
 class ViewList extends Component {
   constructor(props) {
     super(props);
@@ -138,22 +104,27 @@ class ViewList extends Component {
     return newData;
   };
   SearchFilterFunction_sec = (text) => {
-    const { flatListItems, senior, junior } = this.state;
+    const { flatListItems, senior, junior,first,second } = this.state;
     console.log("in filter senior", senior);
     if (text) {
       let new_data;
       new_data = this.checkFilter(senior, text);
       new_data = this.checkFilter(junior, text);
-
+      new_data = this.checkFilter(first, text);
+      // new_data = this.checkFilter(second, text);
       this.setState({
         filteredSenior: new_data,
         filteredJunior: new_data,
+        filteredFirst:new_data,
+        // filteredSecond:new_data,
         search: text,
       });
     } else {
       this.setState({
         filteredSenior: senior,
         filteredJunior: junior,
+        filteredFirst:first,
+        // filteredSecond:second,
         search: text,
       });
     }
