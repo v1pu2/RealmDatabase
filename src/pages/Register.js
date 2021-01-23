@@ -1,11 +1,22 @@
 import React, { Component } from "react";
-import { View, ScrollView, KeyboardAvoidingView, Alert,StyleSheet } from "react-native";
+import {
+  View,
+  ScrollView,
+  KeyboardAvoidingView,
+  Alert,
+  StyleSheet,
+  Picker,
+} from "react-native";
 import styled from "styled-components";
 import MyButton from "../component/MyButton";
 import Realm from "realm";
 import { Formik } from "formik";
 import DatePicker from "@react-native-community/datetimepicker";
+import DropDownPicker from "react-native-dropdown-picker";
 let realm;
+
+const stdData = [" std 1", "std 2", "std 3", "std 4", "std 5"];
+const genData = ["Male", "Female"];
 class Register extends Component {
   constructor(props) {
     super(props);
@@ -81,7 +92,7 @@ class Register extends Component {
               }}
               onSubmit={(values) => this.onSubmitClick(values)}
             >
-              {({ values, handleChange, handleSubmit }) => (
+              {({ values, handleChange, handleSubmit, setFieldValue }) => (
                 <KeyboardAvoidingView
                   behavior='padding'
                   style={{ flex: 1, justifyContent: "space-between" }}
@@ -99,16 +110,43 @@ class Register extends Component {
                     placeholder='Enter E-mail'
                   />
 
-                  <Input
-                    value={values.std}
+                 <Picker
+                    selectedValue={values.std}
                     onChangeText={handleChange("std")}
-                    placeholder='Enter Std'
-                  />
-                  <Input
-                    value={values.gender}
+                    onValueChange={(itemValue) => {
+                      setFieldValue("std", itemValue);
+                    }}
+                  >
+                    <Picker.Item
+                      label='Select your Standard'
+                      value={values.std}
+                      key={0}
+                    />
+                    <Picker.Item label='Junior KG' value={"Junior KG"} key={"1"} />
+                    <Picker.Item label='Senior KG' value={"Senior KG"} key={"2"} />
+                    <Picker.Item label='1st Standard' value={"1st Standard"} key={"3"} />
+                    <Picker.Item label='2nd Standard' value={"2nd Standard"} key={"4"} />
+                    <Picker.Item label='3rd Standard' value={"3rd Standard"} key={"5"} />
+                    <Picker.Item label='4th Standard' value={"4th Standard"} key={"6"} />
+                    <Picker.Item label='5th Standard' value={"5th Standard"} key={"7"} />
+                  </Picker>
+                 
+                  <Picker
+                    selectedValue={values.gender}
                     onChangeText={handleChange("gender")}
-                    placeholder='Enter Gender'
-                  />
+                    onValueChange={(itemValue) => {
+                      setFieldValue("gender", itemValue);
+                    }}
+                  >
+                    <Picker.Item
+                      label='Select your gender'
+                      value={values.gender}
+                      key={0}
+                    />
+                    <Picker.Item label='Male' value={"Male"} key={1} />
+                    <Picker.Item label='Female' value={"Female"} key={2} />
+                  </Picker>
+
                   <Input
                     value={values.birthdate}
                     onChangeText={handleChange("birthdate")}
@@ -203,20 +241,8 @@ const Title = styled.Text`
 `;
 
 const styles = StyleSheet.create({
-    // container: {
-    //   flex: 1,
-    //   padding: 10,
-    //   justifyContent: 'center',
-    //   alignItems: 'center',
-    // },
-    // title: {
-    //   textAlign: 'center',
-    //   fontSize: 20,
-    //   fontWeight: 'bold',
-    //   padding: 20,
-    // },
-    datePickerStyle: {
-      width: 200,
-      marginTop: 20,
-    },
-  });
+  datePickerStyle: {
+    width: 200,
+    marginTop: 20,
+  },
+});

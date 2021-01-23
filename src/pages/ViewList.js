@@ -35,6 +35,7 @@ class ViewList extends Component {
               <Text>Id: {item.roll_no}</Text>
               <Text>Name: {item.name}</Text>
               <Text>Email: {item.email}</Text>
+              <Text>Gender: {item.gender}</Text>
               <Text>Std: {item.std}</Text>
             </View>
           )}
