@@ -124,25 +124,38 @@ class ViewList extends Component {
       }
     }
   }
+  checkFilter = (list, text) => {
+    const newData = list.filter(function (item) {
+      let fullName, itemData;
+      const itemName = item.name ? item.name.toUpperCase() : "".toUpperCase();
+      const email = item.email ? item.email.toUpperCase() : "".toUpperCase();
+
+      fullName = itemName.concat(email);
+      itemData = fullName ? fullName.toUpperCase() : "".toUpperCase();
+      const textData = text.toUpperCase();
+      return itemData.indexOf(textData) > -1;
+    });
+    return newData;
+  };
   SearchFilterFunction_sec = (text) => {
-    const { flatListItems, senior } = this.state;
+    const { flatListItems, senior, junior } = this.state;
     console.log("in filter senior", senior);
     if (text) {
-      const newData = senior.filter(function (item) {
-        let fullName, itemData;
-        const itemName = item.name ? item.name.toUpperCase() : "".toUpperCase();
-        const email = item.email ? item.email.toUpperCase() : "".toUpperCase();
+      let new_data;
+      new_data = this.checkFilter(senior, text);
+      new_data = this.checkFilter(junior, text);
 
-        fullName = itemName.concat(email);
-        itemData = fullName ? fullName.toUpperCase() : "".toUpperCase();
-        const textData = text.toUpperCase();
-        return itemData.indexOf(textData) > -1;
+      this.setState({
+        filteredSenior: new_data,
+        filteredJunior: new_data,
+        search: text,
       });
-      console.log("in ifff new data", newData);
-      this.setState({ filteredSenior: newData, search: text });
     } else {
-      console.log("in elseeee", senior);
-      this.setState({ filteredSenior: senior, search: text });
+      this.setState({
+        filteredSenior: senior,
+        filteredJunior: junior,
+        search: text,
+      });
     }
   };
   SearchFilterFunction = (text) => {
@@ -174,20 +187,7 @@ class ViewList extends Component {
     );
   };
   render() {
-    const {
-      search,
-      filteredList,
-      isExpanded,
-      activeIndex,
-      junior,
-      senior,
-      first,
-      second,
-      third,
-      forth,
-      fifth,
-      filteredSenior,
-    } = this.state;
+    const { search, filteredSenior, filteredJunior } = this.state;
 
     return (
       <>
@@ -202,13 +202,13 @@ class ViewList extends Component {
           <SectionList
             ItemSeparatorComponent={this.FlatListItemSeparator}
             sections={[
-              { title: "Standard Junior", data: junior || [] },
+              { title: "Standard Junior", data: filteredJunior || [] },
               { title: "Standard Senior", data: filteredSenior || [] },
-              { title: "1st Standard", data: first || [] },
-              { title: "2nd Standard", data: second || [] },
-              { title: "3rd Standard", data: third || [] },
-              { title: "4th Standard", data: forth || [] },
-              { title: "5th Standard", data: fifth || [] },
+              { title: "1st Standard", data: this.state.filteredFirst || [] },
+              { title: "2nd Standard", data: this.state.filteredSecond || [] },
+              { title: "3rd Standard", data: this.state.filteredThird || [] },
+              { title: "4th Standard", data: this.state.filteredForth || [] },
+              { title: "5th Standard", data: this.state.filteredFifth || [] },
             ]}
             renderSectionHeader={({ section }) => (
               <Text style={styles.sectionHeaderStyle}>{section.title}</Text>
@@ -223,36 +223,6 @@ class ViewList extends Component {
             )}
             keyExtractor={(item, index) => index}
           />
-          {/* <ScrollView>
-            {filteredList &&
-              filteredList.map((item, index) => {
-                return (
-                  <>
-                    <ItemView>
-                      <TouchableOpacity
-                        onPress={() => this.onCustomizeClik(item, index)}
-                        activeOpacity={0.7}
-                      >
-                        <RowView>
-                          <StartRowView>
-                            <Title>{item.std}</Title>
-                          </StartRowView>
-                          <EndView>
-                            <TxtEndIcon>
-                              {isExpanded && index === activeIndex ? "-" : "+"}
-                            </TxtEndIcon>
-                          </EndView>
-                        </RowView>
-                      </TouchableOpacity>
-                    </ItemView>
-
-                    {isExpanded && index === activeIndex && (
-                      <AccordionPanel key={item.roll_no} item={item} />
-                    )}
-                  </>
-                );
-              })}
-          </ScrollView> */}
         </Container>
       </>
     );
