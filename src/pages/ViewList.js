@@ -104,27 +104,35 @@ class ViewList extends Component {
     return newData;
   };
   SearchFilterFunction_sec = (text) => {
-    const { flatListItems, senior, junior,first,second } = this.state;
+    const {
+      flatListItems,
+      senior,
+      junior,
+      first,
+      second,
+      third,
+      forth,
+    } = this.state;
     console.log("in filter senior", senior);
     if (text) {
       let new_data;
       new_data = this.checkFilter(senior, text);
       new_data = this.checkFilter(junior, text);
       new_data = this.checkFilter(first, text);
-      // new_data = this.checkFilter(second, text);
+
       this.setState({
         filteredSenior: new_data,
         filteredJunior: new_data,
-        filteredFirst:new_data,
-        // filteredSecond:new_data,
+        filteredFirst: new_data,
+
         search: text,
       });
     } else {
       this.setState({
         filteredSenior: senior,
         filteredJunior: junior,
-        filteredFirst:first,
-        // filteredSecond:second,
+        filteredFirst: first,
+
         search: text,
       });
     }
