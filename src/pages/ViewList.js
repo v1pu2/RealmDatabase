@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 
 import styled from "styled-components";
-import MyButton from "../component/MyButton";
-import { FlatList, Text, View, ScrollView, StyleSheet } from "react-native";
+import { ScrollView, TouchableOpacity } from "react-native";
 import Realm from "realm";
+import AccordionPanel from "../component/AccordionPanel";
 let realm;
 class ViewList extends Component {
   constructor(props) {
@@ -12,6 +12,8 @@ class ViewList extends Component {
       flatListItems: [],
       text: "",
       search: "",
+      isExpanded: false,
+      activeIndex: 0,
     };
     realm = new Realm({ path: "StudDatabase.realm" });
     var user_details = realm.objects("stud_details");
@@ -20,21 +22,17 @@ class ViewList extends Component {
       filteredList: user_details || [],
     };
   }
-  ListViewItemSeparator = () => {
-    return (
-      <View style={{ height: 0.5, width: "100%", backgroundColor: "#000" }} />
-    );
-  };
+
   SearchFilterFunction = (text) => {
     const { flatListItems } = this.state;
     if (text) {
       const newData = flatListItems.filter(function (item) {
-        let fullName,itemData;
+        let fullName, itemData;
         const itemName = item.name ? item.name.toUpperCase() : "".toUpperCase();
-        const email=item.email? item.email.toUpperCase():"".toUpperCase();
+        const email = item.email ? item.email.toUpperCase() : "".toUpperCase();
 
         fullName = itemName.concat(email);
-        itemData = fullName ? fullName.toUpperCase() : ''.toUpperCase();
+        itemData = fullName ? fullName.toUpperCase() : "".toUpperCase();
         const textData = text.toUpperCase();
         return itemData.indexOf(textData) > -1;
       });
@@ -43,37 +41,52 @@ class ViewList extends Component {
       this.setState({ filteredList: flatListItems, search: text });
     }
   };
+  onCustomizeClik = (item, index) => {
+    this.setState({ isExpanded: true, activeIndex: index });
+  };
   render() {
-    const { search, filteredList } = this.state;
+    const { search, filteredList, isExpanded, activeIndex } = this.state;
     return (
       <>
         <Container>
           <Input
             placeholder='Search Here'
             placeholderTextColor='gray'
-            inputStyle={styles.txtSearch}
             autoFocus={false}
             onChangeText={(text) => this.SearchFilterFunction(text)}
-            inputContainerStyle={styles.input}
             value={search}
-            containerStyle={styles.inputContainerStyle}
           />
 
-          <FlatList
-            data={filteredList}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <View
-                style={styles.itemView}
-              >
-                <Text>Id: {item.roll_no}</Text>
-                <Text>Name: {item.name}</Text>
-                <Text>Email: {item.email}</Text>
-                <Text>Gender: {item.gender}</Text>
-                <Text>Std: {item.std}</Text>
-              </View>
-            )}
-          />
+          <ScrollView>
+            {filteredList &&
+              filteredList.map((item, index) => {
+                return (
+                  <>
+                    <ItemView>
+                      <TouchableOpacity
+                        onPress={() => this.onCustomizeClik(item, index)}
+                        activeOpacity={0.7}
+                      >
+                        <RowView>
+                          <StartRowView>
+                            <Title>{item.std}</Title>
+                          </StartRowView>
+                          <EndView>
+                            <TxtEndIcon>
+                              {isExpanded && index === activeIndex ? "-" : "+"}
+                            </TxtEndIcon>
+                          </EndView>
+                        </RowView>
+                      </TouchableOpacity>
+                    </ItemView>
+
+                    {isExpanded && index === activeIndex && (
+                      <AccordionPanel key={item.roll_no} item={item} />
+                    )}
+                  </>
+                );
+              })}
+          </ScrollView>
         </Container>
       </>
     );
@@ -88,9 +101,8 @@ const Container = styled.View`
 `;
 const Title = styled.Text`
   font-size: 14px;
-  font-weight: 500;
-  color: red;
-  margin-left: 20px;
+  font-weight: 700;
+  color: black;
 `;
 const Input = styled.TextInput`
   font-size: 18px;
@@ -103,25 +115,36 @@ const Input = styled.TextInput`
     color: palevioletred;
   }
 `;
-const styles = StyleSheet.create({
-  inputContainerStyle: {
-    marginTop: 5,
-    backgroundColor: "white",
-    borderRadius: 5,
-    borderColor: "gray",
-    borderWidth: 1,
-    width: "100%",
-  },
-  mainContainer: { padding: 15, justifyContent: "center" },
-  mainCenterContainer: { padding: 15, flex: 1 },
-  input: { backgroundColor: "white", borderBottomWidth: 0 },
-  txtSearch: { color: "black", fontSize: 14 },
-  itemView:{
-    backgroundColor: "white",
-    margin: 10,
-    padding: 10,
-    borderColor: "black",
-    borderWidth: 1,
-    borderRadius: 10,
-  }
-});
+const ItemView = styled.View`
+  background-color: white;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+  padding: 10px;
+  border-color: black;
+  border-width: 1px;
+`;
+const TxtEndIcon = styled.Text`
+  font-size: 26px;
+  text-align-vertical: center;
+  color: black;
+  padding: 5px;
+`;
+const EndView = styled.View`
+  justify-content: center;
+  align-self: center;
+  height: 30px;
+  width: 30px;
+  border-radius: 15px;
+  background-color: gray;
+  align-items: center;
+`;
+const StartRowView = styled.View`
+  flex-direction: row;
+  width: 92%;
+  align-items: center;
+`;
+const RowView = styled.View`
+  flex-direction: row;
+  margin-right: 5px;
+`;

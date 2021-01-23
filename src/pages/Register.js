@@ -18,8 +18,7 @@ import DatePicker from "@react-native-community/datetimepicker";
 
 let realm;
 
-const stdData = [" std 1", "std 2", "std 3", "std 4", "std 5"];
-const genData = ["Male", "Female"];
+
 class Register extends Component {
   constructor(props) {
     super(props);
@@ -29,7 +28,6 @@ class Register extends Component {
       std: "",
       gender: "",
       birthdate: "09-10-2020",
-      //   Birth_Date: "",
       image: "",
       show: false,
     };
@@ -98,10 +96,8 @@ class Register extends Component {
               onSubmit={(values) => this.onSubmitClick(values)}
             >
               {({ values, handleChange, handleSubmit, setFieldValue }) => (
-                <KeyboardAvoidingView
-                  behavior='padding'
-                  style={{ flex: 1, justifyContent: "space-between" }}
-                >
+               
+                <View>
                   <Input
                     placeholder='Enter Name'
                     onChangeText={handleChange("name")}
@@ -220,7 +216,7 @@ class Register extends Component {
                     placeholder='Enter Image'
                   />
                   <MyButton title='Submit' onPress={handleSubmit} />
-                </KeyboardAvoidingView>
+                  </View>
               )}
             </Formik>
           </ScrollView>
