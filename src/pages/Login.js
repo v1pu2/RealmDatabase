@@ -12,7 +12,7 @@ class Login extends Component {
   }
   onSubmitClick = (values) => {
     console.log('in submit click',values);
-    AsyncStorage.setItem('ISLOGIN','true' );
+    AsyncStorage.setItem('ISLOGIN',true );
     this.props.navigation.navigate("Dashboard");
   };
 

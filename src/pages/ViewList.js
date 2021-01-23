@@ -112,50 +112,48 @@ class ViewList extends Component {
       second,
       third,
       forth,
+      fifth,
     } = this.state;
-    console.log("in filter senior", senior);
+    console.log("in filter senior******", fifth);
     if (text) {
-      let new_data;
-      new_data = this.checkFilter(senior, text);
-      new_data = this.checkFilter(junior, text);
-      new_data = this.checkFilter(first, text);
-
+      const jun_data =
+        junior && junior.length > 0 ? this.checkFilter(junior, text) : junior;
+      const sen_data =
+        senior && senior.length > 0 ? this.checkFilter(senior, text) : senior;
+      const fst_data =
+        first && first.length > 0 ? this.checkFilter(first, text) : first;
+      const sec_data =
+        second && second.length > 0 ? this.checkFilter(second, text) : second;
+      const thr_data =
+        third && third.length > 0 ? this.checkFilter(third, text) : third;
+      const fort_data =
+        forth && forth.length > 0 ? this.checkFilter(forth, text) : forth;
+      const fif_data =
+        fifth && fifth.length > 0 ? this.checkFilter(fifth, text) : fifth;
       this.setState({
-        filteredSenior: new_data,
-        filteredJunior: new_data,
-        filteredFirst: new_data,
-
+        filteredJunior: jun_data,
+        filteredSenior: sen_data,
+        filteredFirst: fst_data,
+        filteredSecond: sec_data,
+        filteredThird: thr_data,
+        filteredForth: fort_data,
+        filteredFifth: fif_data,
         search: text,
       });
     } else {
       this.setState({
-        filteredSenior: senior,
         filteredJunior: junior,
+        filteredSenior: senior,
         filteredFirst: first,
-
+        filteredSecond: second,
+        filteredThird: third,
+        filteredForth: forth,
+        filteredFifth: fifth,
         search: text,
       });
     }
   };
-  SearchFilterFunction = (text) => {
-    const { flatListItems } = this.state;
-    if (text) {
-      const newData = flatListItems.filter(function (item) {
-        let fullName, itemData;
-        const itemName = item.name ? item.name.toUpperCase() : "".toUpperCase();
-        const email = item.email ? item.email.toUpperCase() : "".toUpperCase();
 
-        fullName = itemName.concat(email);
-        itemData = fullName ? fullName.toUpperCase() : "".toUpperCase();
-        const textData = text.toUpperCase();
-        return itemData.indexOf(textData) > -1;
-      });
-      console.log("new data", newData);
-      this.setState({ filteredList: newData, search: text });
-    } else {
-      this.setState({ filteredList: flatListItems, search: text });
-    }
-  };
   onCustomizeClik = (item, index) => {
     this.setState({ isExpanded: true, activeIndex: index });
   };
