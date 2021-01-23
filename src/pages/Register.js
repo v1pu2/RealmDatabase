@@ -28,7 +28,7 @@ class Register extends Component {
       std: "",
       gender: "",
       birthdate: "09-10-2020",
-      image: "",
+      image: "https://www.ldatschool.ca/wp-content/uploads/2015/03/Young-student.jpg",
       show: false,
     };
     realm = new Realm({ path: "StudDatabase.realm" });
@@ -91,7 +91,7 @@ class Register extends Component {
                 std: "",
                 gender: "",
                 birthdate: "",
-                image: "",
+                image: "https://www.ldatschool.ca/wp-content/uploads/2015/03/Young-student.jpg",
               }}
               onSubmit={(values) => this.onSubmitClick(values)}
             >
