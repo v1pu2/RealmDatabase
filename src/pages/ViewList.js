@@ -1,10 +1,52 @@
 import React, { Component } from "react";
 
 import styled from "styled-components";
-import { ScrollView, TouchableOpacity } from "react-native";
+import {
+  ScrollView,
+  TouchableOpacity,
+  SectionList,
+  Text,
+  StyleSheet,
+  View,
+} from "react-native";
 import Realm from "realm";
 import AccordionPanel from "../component/AccordionPanel";
 let realm;
+let A = [
+  {
+    birthdate: "",
+    email: "Cvb@fgh.ghj",
+    gender: "Male",
+    image: "Ffgh",
+    name: "Fgg",
+    roll_no: 1,
+    std: "Senior KG",
+  },
+  {
+    birthdate: "",
+    email: "Vvv@vj.sff",
+    gender: "Female",
+    image: "",
+    name: "Vipu",
+    roll_no: 3,
+    std: "Senior KG",
+  },
+];
+let B = [
+  { id: "4", value: "Benin" },
+  { id: "5", value: "Bhutan" },
+  { id: "6", value: "Bosnia" },
+  { id: "7", value: "Botswana" },
+  { id: "8", value: "Brazil" },
+  { id: "9", value: "Brunei" },
+  { id: "10", value: "Bulgaria" },
+];
+let C = [
+  { id: "11", value: "Cambodia" },
+  { id: "12", value: "Cameroon" },
+  { id: "13", value: "Canada" },
+  { id: "14", value: "Cabo" },
+];
 class ViewList extends Component {
   constructor(props) {
     super(props);
@@ -14,6 +56,20 @@ class ViewList extends Component {
       search: "",
       isExpanded: false,
       activeIndex: 0,
+      junior: [],
+      senior: [],
+      first: [],
+      second: [],
+      third: [],
+      forth: [],
+      fifth: [],
+      filteredJunior: [],
+      filteredSenior: [],
+      filteredFirst: [],
+      filteredSecond: [],
+      filteredThird: [],
+      filteredForth: [],
+      filteredFifth: [],
     };
     realm = new Realm({ path: "StudDatabase.realm" });
     var user_details = realm.objects("stud_details");
@@ -23,6 +79,72 @@ class ViewList extends Component {
     };
   }
 
+  componentDidMount() {
+    const { flatListItems } = this.state;
+    // console.log("in didmount", flatListItems);
+    let jun = [],
+      sen = [],
+      fst = [],
+      sec = [],
+      thr = [],
+      fort = [],
+      fif = [];
+    for (let i = 0; i < flatListItems.length; i++) {
+      // console.log("in loop", flatListItems[i]);
+      let obj = {};
+
+      if (flatListItems[i].std === "Senior KG") {
+        obj = flatListItems[i];
+        sen.push(obj);
+        this.setState({ senior: sen, filteredSenior: sen });
+      } else if (flatListItems[i].std === "Junior KG") {
+        obj = flatListItems[i];
+        jun.push(obj);
+        this.setState({ junior: jun, filteredJunior: jun });
+      } else if (flatListItems[i].std === "1st Standard") {
+        obj = flatListItems[i];
+        fst.push(obj);
+        this.setState({ first: fst, filteredFirst: fst });
+      } else if (flatListItems[i].std === "2nd Standard") {
+        obj = flatListItems[i];
+        sec.push(obj);
+        this.setState({ second: sec, filteredSecond: sec });
+      } else if (flatListItems[i].std === "3rd Standard") {
+        obj = flatListItems[i];
+        thr.push(obj);
+        this.setState({ third: thr, filteredThird: thr });
+      } else if (flatListItems[i].std === "4th Standard") {
+        obj = flatListItems[i];
+        fort.push(obj);
+        this.setState({ forth: fort, filteredForth: fort });
+      } else if (flatListItems[i].std === "5th Standard") {
+        obj = flatListItems[i];
+        fif.push(obj);
+        this.setState({ fifth: fif, filteredFifth: fif });
+      }
+    }
+  }
+  SearchFilterFunction_sec = (text) => {
+    const { flatListItems, senior } = this.state;
+    console.log("in filter senior", senior);
+    if (text) {
+      const newData = senior.filter(function (item) {
+        let fullName, itemData;
+        const itemName = item.name ? item.name.toUpperCase() : "".toUpperCase();
+        const email = item.email ? item.email.toUpperCase() : "".toUpperCase();
+
+        fullName = itemName.concat(email);
+        itemData = fullName ? fullName.toUpperCase() : "".toUpperCase();
+        const textData = text.toUpperCase();
+        return itemData.indexOf(textData) > -1;
+      });
+      console.log("in ifff new data", newData);
+      this.setState({ filteredSenior: newData, search: text });
+    } else {
+      console.log("in elseeee", senior);
+      this.setState({ filteredSenior: senior, search: text });
+    }
+  };
   SearchFilterFunction = (text) => {
     const { flatListItems } = this.state;
     if (text) {
@@ -36,6 +158,7 @@ class ViewList extends Component {
         const textData = text.toUpperCase();
         return itemData.indexOf(textData) > -1;
       });
+      console.log("new data", newData);
       this.setState({ filteredList: newData, search: text });
     } else {
       this.setState({ filteredList: flatListItems, search: text });
@@ -44,8 +167,28 @@ class ViewList extends Component {
   onCustomizeClik = (item, index) => {
     this.setState({ isExpanded: true, activeIndex: index });
   };
+  FlatListItemSeparator = () => {
+    return (
+      //Item Separator
+      <View style={styles.listItemSeparatorStyle} />
+    );
+  };
   render() {
-    const { search, filteredList, isExpanded, activeIndex } = this.state;
+    const {
+      search,
+      filteredList,
+      isExpanded,
+      activeIndex,
+      junior,
+      senior,
+      first,
+      second,
+      third,
+      forth,
+      fifth,
+      filteredSenior,
+    } = this.state;
+
     return (
       <>
         <Container>
@@ -53,11 +196,34 @@ class ViewList extends Component {
             placeholder='Search Here'
             placeholderTextColor='gray'
             autoFocus={false}
-            onChangeText={(text) => this.SearchFilterFunction(text)}
+            onChangeText={(text) => this.SearchFilterFunction_sec(text)}
             value={search}
           />
-
-          <ScrollView>
+          <SectionList
+            ItemSeparatorComponent={this.FlatListItemSeparator}
+            sections={[
+              { title: "Standard Junior", data: junior || [] },
+              { title: "Standard Senior", data: filteredSenior || [] },
+              { title: "1st Standard", data: first || [] },
+              { title: "2nd Standard", data: second || [] },
+              { title: "3rd Standard", data: third || [] },
+              { title: "4th Standard", data: forth || [] },
+              { title: "5th Standard", data: fifth || [] },
+            ]}
+            renderSectionHeader={({ section }) => (
+              <Text style={styles.sectionHeaderStyle}>{section.title}</Text>
+            )}
+            renderItem={({ item }) => (
+              <RowView>
+                <Text style={styles.sectionListItemStyle}>{item.roll_no}</Text>
+                <Text style={styles.sectionListItemStyle}>{item.name}</Text>
+                <Text style={styles.sectionListItemStyle}>{item.email}</Text>
+                <Text style={styles.sectionListItemStyle}>{item.gender}</Text>
+              </RowView>
+            )}
+            keyExtractor={(item, index) => index}
+          />
+          {/* <ScrollView>
             {filteredList &&
               filteredList.map((item, index) => {
                 return (
@@ -86,7 +252,7 @@ class ViewList extends Component {
                   </>
                 );
               })}
-          </ScrollView>
+          </ScrollView> */}
         </Container>
       </>
     );
@@ -148,3 +314,27 @@ const RowView = styled.View`
   flex-direction: row;
   margin-right: 5px;
 `;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    backgroundColor: "white",
+  },
+  sectionHeaderStyle: {
+    backgroundColor: "#CDDC89",
+    fontSize: 20,
+    padding: 5,
+    color: "#fff",
+  },
+  sectionListItemStyle: {
+    fontSize: 15,
+    padding: 15,
+    color: "#000",
+    backgroundColor: "#F5F5F5",
+  },
+  listItemSeparatorStyle: {
+    height: 0.5,
+    width: "100%",
+    backgroundColor: "#C8C8C8",
+  },
+});
