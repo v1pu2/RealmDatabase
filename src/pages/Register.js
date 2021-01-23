@@ -6,13 +6,16 @@ import {
   Alert,
   StyleSheet,
   Picker,
+  Text,
+  TouchableHighlight,
+  Button,
 } from "react-native";
 import styled from "styled-components";
 import MyButton from "../component/MyButton";
 import Realm from "realm";
 import { Formik } from "formik";
 import DatePicker from "@react-native-community/datetimepicker";
-import DropDownPicker from "react-native-dropdown-picker";
+
 let realm;
 
 const stdData = [" std 1", "std 2", "std 3", "std 4", "std 5"];
@@ -25,7 +28,7 @@ class Register extends Component {
       email: "",
       std: "",
       gender: "",
-      birthdate: "",
+      birthdate: "09-10-2020",
       //   Birth_Date: "",
       image: "",
       show: false,
@@ -34,7 +37,7 @@ class Register extends Component {
   }
 
   onSubmitClick = (values) => {
-    // console.log("in submit click", values.name);
+    console.log("in submit click", values.birthdate);
     const { name, email, std, gender, birthdate, image } = values;
     realm.write(() => {
       var ID =
@@ -63,7 +66,9 @@ class Register extends Component {
       );
     });
   };
-
+  showDatePicker = () => {
+    this.setState({ show: true });
+  };
   onOk = () => {
     this.setState({
       name: "",
@@ -110,7 +115,7 @@ class Register extends Component {
                     placeholder='Enter E-mail'
                   />
 
-                 <Picker
+                  <Picker
                     selectedValue={values.std}
                     onChangeText={handleChange("std")}
                     onValueChange={(itemValue) => {
@@ -122,15 +127,43 @@ class Register extends Component {
                       value={values.std}
                       key={0}
                     />
-                    <Picker.Item label='Junior KG' value={"Junior KG"} key={"1"} />
-                    <Picker.Item label='Senior KG' value={"Senior KG"} key={"2"} />
-                    <Picker.Item label='1st Standard' value={"1st Standard"} key={"3"} />
-                    <Picker.Item label='2nd Standard' value={"2nd Standard"} key={"4"} />
-                    <Picker.Item label='3rd Standard' value={"3rd Standard"} key={"5"} />
-                    <Picker.Item label='4th Standard' value={"4th Standard"} key={"6"} />
-                    <Picker.Item label='5th Standard' value={"5th Standard"} key={"7"} />
+                    <Picker.Item
+                      label='Junior KG'
+                      value={"Junior KG"}
+                      key={"1"}
+                    />
+                    <Picker.Item
+                      label='Senior KG'
+                      value={"Senior KG"}
+                      key={"2"}
+                    />
+                    <Picker.Item
+                      label='1st Standard'
+                      value={"1st Standard"}
+                      key={"3"}
+                    />
+                    <Picker.Item
+                      label='2nd Standard'
+                      value={"2nd Standard"}
+                      key={"4"}
+                    />
+                    <Picker.Item
+                      label='3rd Standard'
+                      value={"3rd Standard"}
+                      key={"5"}
+                    />
+                    <Picker.Item
+                      label='4th Standard'
+                      value={"4th Standard"}
+                      key={"6"}
+                    />
+                    <Picker.Item
+                      label='5th Standard'
+                      value={"5th Standard"}
+                      key={"7"}
+                    />
                   </Picker>
-                 
+
                   <Picker
                     selectedValue={values.gender}
                     onChangeText={handleChange("gender")}
@@ -147,59 +180,40 @@ class Register extends Component {
                     <Picker.Item label='Female' value={"Female"} key={2} />
                   </Picker>
 
-                  <Input
-                    value={values.birthdate}
-                    onChangeText={handleChange("birthdate")}
-                    placeholder='Enter Birthdate'
-                  />
-                  {/* <DatePicker
-                    style={styles.datePickerStyle}
-                    date={values.birthdate} // Initial date from state
-                    mode='date' // The enum of date, datetime and time
-                    placeholder='select date'
-                    format='DD-MM-YYYY'
-                    minDate='01-01-2016'
-                    maxDate='01-01-2019'
-                    confirmBtnText='Confirm'
-                    cancelBtnText='Cancel'
-                    customStyles={{
-                      dateIcon: {
-                        //display: 'none',
-                        position: "absolute",
-                        left: 0,
-                        top: 4,
-                        marginLeft: 0,
-                      },
-                      dateInput: {
-                        marginLeft: 36,
-                      },
-                    }}
-                    // onDateChange={(date) => {
-                    // handleChange(date)
-                    // }}
-                  /> */}
-                  {/* <View style={styles.buttonView}>
-                    <Button
-                      title={Birth_Date || "Date of Birth"}
-                      onPress={this.showDatePicker}
-                      type='clear'
-                      titleStyle={
-                        Birth_Date ? styles.dateStyle : styles.buttonTitleStyle
-                      }
-                      containerStyle={styles.buttonContainer}
-                    />
-                    <View style={styles.line} />
+                  <View style={styles.buttonView}>
+                    <TouchableHighlight onPress={this.showDatePicker}>
+                      <Title>select your birthdate</Title>
+                    </TouchableHighlight>
                   </View>
-                  {show && (
-                    <DateTimePicker
-                      value={new Date()}
-                      mode={mode}
-                      // is24Hour
-                      display='default'
-                      maximumDate={new Date()}
-                      onChange={this.setDate}
+                  {/* {show && (
+                      
+                    <DatePicker
+                      style={styles.datePickerStyle}
+                      value={values.birthdate} // Initial date from state
+                      mode='date' // The enum of date, datetime and time
+                      placeholder='select date'
+                      format='DD-MM-YYYY'
+                      minDate='01-01-2016'
+                      maxDate='01-01-2019'
+                      confirmBtnText='Confirm'
+                      cancelBtnText='Cancel'
+                      customStyles={{
+                        dateIcon: {
+                          position: "absolute",
+                          left: 0,
+                          top: 4,
+                          marginLeft: 0,
+                        },
+                        dateInput: {
+                          marginLeft: 36,
+                        },
+                      }}
+                      onDateChange={(date) => {
+                        handleChange(date);
+                      }}
                     />
                   )} */}
+
                   <Input
                     value={values.image}
                     onChangeText={handleChange("image")}
@@ -234,15 +248,41 @@ const Input = styled.TextInput`
   }
 `;
 const Title = styled.Text`
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
-  color: red;
-  margin-left: 20px;
+  color: black;
+  background: papayawhip;
+  border: none;
+  padding: 10px;
+  border-radius: 3px;
+  ::placeholder {
+    color: palevioletred;
+  }
 `;
 
 const styles = StyleSheet.create({
   datePickerStyle: {
     width: 200,
     marginTop: 20,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    paddingLeft: 8,
+  },
+  buttonTitleStyle: {
+    color: "lightgrey",
+    fontSize: 18,
+  },
+  dateStyle: {
+    color: "gray",
+    fontSize: 18,
+    fontWeight: "normal",
+  },
+  buttonView: { margin: 10 },
+  line: {
+    borderBottomWidth: 1,
+    width: "95%",
+    marginLeft: 10,
+    borderBottomColor: "black",
   },
 });
