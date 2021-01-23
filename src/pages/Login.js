@@ -11,7 +11,6 @@ class Login extends Component {
     this.state={}
   }
   onSubmitClick = (values) => {
-    console.log('in submit click',values);
     AsyncStorage.setItem('ISLOGIN',true );
     this.props.navigation.navigate("Dashboard");
   };

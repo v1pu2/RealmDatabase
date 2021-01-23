@@ -19,13 +19,11 @@ class App extends Component {
   }
   async componentDidMount() {
     const isLogin = await AsyncStorage.getItem("ISLOGIN");
-    console.log("islogin in didmount",isLogin);
     this.setState({ isLogin: isLogin });
   }
 
   render() {
     const { isLogin } = this.state;
-    console.log("isLogin", isLogin);
     return (
       <NavigationContainer>
         <Stack.Navigator
