@@ -6,9 +6,11 @@ const AccordionPanel = (props) => {
 
   return (
     <Container>
+      <Title>Roll No : {item.roll_no}</Title>
       <Title>Name : {item.name}</Title>
       <Title>Email : {item.email}</Title>
       <Title>Gender : {item.gender}</Title>
+      <Title>Gender : {item.image}</Title>
     </Container>
   );
 };
