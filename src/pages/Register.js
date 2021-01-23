@@ -41,7 +41,7 @@ class Register extends Component {
       });
       Alert.alert(
         "Success",
-        "You are registered successfully",
+        `Student with roll no ${ID} has been registered successfully.`,
         [
           {
             text: "Ok",
