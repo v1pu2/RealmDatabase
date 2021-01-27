@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from 'react';
 import {
   View,
   ScrollView,
@@ -9,40 +9,41 @@ import {
   Text,
   TouchableHighlight,
   Button,
-} from "react-native";
-import styled from "styled-components";
-import MyButton from "../component/MyButton";
-import Realm from "realm";
-import { Formik } from "formik";
-import DatePicker from "@react-native-community/datetimepicker";
-
+} from 'react-native';
+import styled from 'styled-components';
+import MyButton from '../component/MyButton';
+import Realm from 'realm';
+import {Formik} from 'formik';
+import DatePicker from '@react-native-community/datetimepicker';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import moment from 'moment';
 let realm;
-
 
 class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
-      email: "",
-      std: "",
-      gender: "",
-      birthdate: "09-10-2020",
-      image: "https://www.ldatschool.ca/wp-content/uploads/2015/03/Young-student.jpg",
+      name: '',
+      email: '',
+      std: '',
+      gender: '',
+      birthdate: new Date(),
+      image:
+        'https://www.ldatschool.ca/wp-content/uploads/2015/03/Young-student.jpg',
       show: false,
     };
-    realm = new Realm({ path: "StudDatabase.realm" });
+    realm = new Realm({path: 'StudDatabase.realm'});
   }
 
   onSubmitClick = (values) => {
-    console.log("in submit click", values.birthdate);
-    const { name, email, std, gender, birthdate, image } = values;
+    console.log('in submit click', values.birthdate);
+    const {name, email, std, gender, birthdate, image} = values;
     realm.write(() => {
       var ID =
-        realm.objects("stud_details").sorted("roll_no", true).length > 0
-          ? realm.objects("stud_details").sorted("roll_no", true)[0].roll_no + 1
+        realm.objects('stud_details').sorted('roll_no', true).length > 0
+          ? realm.objects('stud_details').sorted('roll_no', true)[0].roll_no + 1
           : 1;
-      realm.create("stud_details", {
+      realm.create('stud_details', {
         roll_no: ID,
         name: name,
         email: email,
@@ -52,150 +53,150 @@ class Register extends Component {
         image: image,
       });
       Alert.alert(
-        "Success",
+        'Success',
         `Student with roll no ${ID} has been registered successfully.`,
         [
           {
-            text: "Ok",
+            text: 'Ok',
             onPress: this.onOk(),
           },
         ],
-        { cancelable: false }
+        {cancelable: false},
       );
     });
   };
   showDatePicker = () => {
-    this.setState({ show: true });
+    this.setState({show: true});
   };
   onOk = () => {
     this.setState({
-      name: "",
-      email: "",
-      std: "",
-      gender: "",
-      birthdate: "",
-      image: "",
+      name: '',
+      email: '',
+      std: '',
+      gender: '',
+      birthdate: new Date(),
+      image: '',
     });
-    this.props.navigation.navigate("ViewList");
+    this.props.navigation.navigate('ViewList');
   };
   render() {
-    const { show } = this.state;
+    const {show} = this.state;
     return (
       <>
         <Container>
-          <ScrollView keyboardShouldPersistTaps='handled'>
+          <ScrollView keyboardShouldPersistTaps="handled">
             <Formik
               initialValues={{
-                name: "",
-                email: "",
-                std: "",
-                gender: "",
-                birthdate: "",
-                image: "https://www.ldatschool.ca/wp-content/uploads/2015/03/Young-student.jpg",
+                name: '',
+                email: '',
+                std: '',
+                gender: '',
+                birthdate: new Date(),
+                image:
+                  'https://www.ldatschool.ca/wp-content/uploads/2015/03/Young-student.jpg',
               }}
-              onSubmit={(values) => this.onSubmitClick(values)}
-            >
-              {({ values, handleChange, handleSubmit, setFieldValue }) => (
-               
+              onSubmit={(values) => this.onSubmitClick(values)}>
+              {({values, handleChange, handleSubmit, setFieldValue}) => (
                 <View>
                   <Input
-                    placeholder='Enter Name'
-                    onChangeText={handleChange("name")}
+                    placeholder="Enter Name"
+                    onChangeText={handleChange('name')}
                     value={values.name}
                   />
 
                   <Input
                     value={values.email}
-                    onChangeText={handleChange("email")}
-                    keyboardType='email-address'
-                    placeholder='Enter E-mail'
+                    onChangeText={handleChange('email')}
+                    keyboardType="email-address"
+                    placeholder="Enter E-mail"
                   />
 
                   <Picker
                     selectedValue={values.std}
-                    onChangeText={handleChange("std")}
+                    onChangeText={handleChange('std')}
                     onValueChange={(itemValue) => {
-                      setFieldValue("std", itemValue);
-                    }}
-                  >
+                      setFieldValue('std', itemValue);
+                    }}>
                     <Picker.Item
-                      label='Select your Standard'
+                      label="Select your Standard"
                       value={values.std}
                       key={0}
                     />
                     <Picker.Item
-                      label='Junior KG'
-                      value={"Junior KG"}
-                      key={"1"}
+                      label="Junior KG"
+                      value={'Junior KG'}
+                      key={'1'}
                     />
                     <Picker.Item
-                      label='Senior KG'
-                      value={"Senior KG"}
-                      key={"2"}
+                      label="Senior KG"
+                      value={'Senior KG'}
+                      key={'2'}
                     />
                     <Picker.Item
-                      label='1st Standard'
-                      value={"1st Standard"}
-                      key={"3"}
+                      label="1st Standard"
+                      value={'1st Standard'}
+                      key={'3'}
                     />
                     <Picker.Item
-                      label='2nd Standard'
-                      value={"2nd Standard"}
-                      key={"4"}
+                      label="2nd Standard"
+                      value={'2nd Standard'}
+                      key={'4'}
                     />
                     <Picker.Item
-                      label='3rd Standard'
-                      value={"3rd Standard"}
-                      key={"5"}
+                      label="3rd Standard"
+                      value={'3rd Standard'}
+                      key={'5'}
                     />
                     <Picker.Item
-                      label='4th Standard'
-                      value={"4th Standard"}
-                      key={"6"}
+                      label="4th Standard"
+                      value={'4th Standard'}
+                      key={'6'}
                     />
                     <Picker.Item
-                      label='5th Standard'
-                      value={"5th Standard"}
-                      key={"7"}
+                      label="5th Standard"
+                      value={'5th Standard'}
+                      key={'7'}
                     />
                   </Picker>
 
                   <Picker
                     selectedValue={values.gender}
-                    onChangeText={handleChange("gender")}
+                    onChangeText={handleChange('gender')}
                     onValueChange={(itemValue) => {
-                      setFieldValue("gender", itemValue);
-                    }}
-                  >
+                      setFieldValue('gender', itemValue);
+                    }}>
                     <Picker.Item
-                      label='Select your gender'
+                      label="Select your gender"
                       value={values.gender}
                       key={0}
                     />
-                    <Picker.Item label='Male' value={"Male"} key={1} />
-                    <Picker.Item label='Female' value={"Female"} key={2} />
+                    <Picker.Item label="Male" value={'Male'} key={1} />
+                    <Picker.Item label="Female" value={'Female'} key={2} />
                   </Picker>
 
                   <View style={styles.buttonView}>
                     <TouchableHighlight onPress={this.showDatePicker}>
-                      <Title>select your birthdate</Title>
+                      <Title>
+                        {moment(values.birthdate).format('DD-MM-YYYY')}
+                      </Title>
                     </TouchableHighlight>
                   </View>
                   {/* {show && (
-                      
                     <DatePicker
                       style={styles.datePickerStyle}
                       value={values.birthdate} // Initial date from state
-                      mode='date' // The enum of date, datetime and time
-                      placeholder='select date'
-                      format='DD-MM-YYYY'
-                      minDate='01-01-2016'
-                      maxDate='01-01-2019'
-                      confirmBtnText='Confirm'
-                      cancelBtnText='Cancel'
+                      mode="date" // The enum of date, datetime and time
+                      is24Hour={true}
+                      display="default"
+                      placeholder="select date"
+                      format="DD-MM-YYYY"
+                      minDate="01-01-2016"
+                      maxDate="01-01-2019"
+                      confirmBtnText="Confirm"
+                      cancelBtnText="Cancel"
                       customStyles={{
                         dateIcon: {
-                          position: "absolute",
+                          position: 'absolute',
                           left: 0,
                           top: 4,
                           marginLeft: 0,
@@ -204,19 +205,23 @@ class Register extends Component {
                           marginLeft: 36,
                         },
                       }}
-                      onDateChange={(date) => {
-                        handleChange(date);
+                      onChange={(itemValue) => {
+                        console.log('itemvalue in date', itemValue);
+                        setFieldValue('birthdate', itemValue);
                       }}
+                      // onDateChange={(date) => {
+                      //   handleChange(date);
+                      // }}
                     />
                   )} */}
 
                   <Input
                     value={values.image}
-                    onChangeText={handleChange("image")}
-                    placeholder='Enter Image'
+                    onChangeText={handleChange('image')}
+                    placeholder="Enter Image"
                   />
-                  <MyButton title='Submit' onPress={handleSubmit} />
-                  </View>
+                  <MyButton title="Submit" onPress={handleSubmit} />
+                </View>
               )}
             </Formik>
           </ScrollView>
@@ -262,23 +267,23 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   buttonContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     paddingLeft: 8,
   },
   buttonTitleStyle: {
-    color: "lightgrey",
+    color: 'lightgrey',
     fontSize: 18,
   },
   dateStyle: {
-    color: "gray",
+    color: 'gray',
     fontSize: 18,
-    fontWeight: "normal",
+    fontWeight: 'normal',
   },
-  buttonView: { margin: 10 },
+  buttonView: {margin: 10},
   line: {
     borderBottomWidth: 1,
-    width: "95%",
+    width: '95%',
     marginLeft: 10,
-    borderBottomColor: "black",
+    borderBottomColor: 'black',
   },
 });
